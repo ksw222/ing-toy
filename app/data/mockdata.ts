@@ -103,3 +103,42 @@ export const historyItems = [
     { ing: '레티놀 + 히알루론산', date: '2025.01.05', time: '오전 10:15', status: 'safe' },
     { ing: '나이아신아마이드 + 비타민C', date: '2025.01.03', time: '저녁 9:42', status: 'warning' }
 ];
+
+// app/data/mockdata.ts
+
+export const detailedProducts = [
+    {
+        id: 101,
+        name: "히알루론산 수분 세럼",
+        brand: "INGG Lab",
+        category: "세럼",
+        price: 24000,
+        matchScore: 92,
+        skinScores: { dry: 95, oily: 70, sensitive: 90 },
+        ingredients: [
+            { name: "히알루론산", grade: "green", effect: "수분 공급" },
+            { name: "판테놀", grade: "green", effect: "피부 장벽 강화" },
+            { name: "나이아신아마이드", grade: "green", effect: "미백/진정" }
+        ],
+        caution: [],
+        description: "고분자 히알루론산이 피부 속까지 수분을 채워주는 수분 집중 세럼입니다.",
+        alternative: { name: "가성비 수분 앰플", similarity: 98 }
+    },
+    {
+        id: 102,
+        name: "레티놀 리페어 크림",
+        brand: "INGG Lab",
+        category: "크림",
+        price: 45000,
+        matchScore: 65,
+        skinScores: { dry: 80, oily: 60, sensitive: 40 },
+        ingredients: [
+            { name: "레티놀", grade: "yellow", effect: "주름 개선" },
+            { name: "세라마이드", grade: "green", effect: "보습" },
+            { name: "에탄올", grade: "red", effect: "사용감 개선 (자극 주의)" }
+        ],
+        caution: ["에탄올 (민감성 주의)", "레티놀 (초기 자극 주의)"],
+        description: "강력한 안티에이징 효과를 선사하지만, 성분 함량이 높아 주의가 필요합니다.",
+        alternative: { name: "바쿠치올 저자극 크림", similarity: 85 }
+    }
+];

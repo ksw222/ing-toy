@@ -2,15 +2,23 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Home, ShoppingBag, FlaskConical, User } from 'lucide-react';
 
 export function Navigation() {
     const pathname = usePathname();
 
+    // const navItems = [
+    //     { id: '/', label: '홈', icon: '🏠' },
+    //     { id: '/market', label: '마켓', icon: '🛍️' },
+    //     { id: '/lab', label: '실험실', icon: '🧪' },
+    //     { id: '/vault', label: '마이페이지', icon: '👤' }
+    // ];
+    // navItems 배열 수정
     const navItems = [
-        { id: '/', label: '홈', icon: '🏠' },
-        { id: '/market', label: '마켓', icon: '🛍️' },
-        { id: '/lab', label: '실험실', icon: '🧪' },
-        { id: '/vault', label: '마이페이지', icon: '👤' }
+        { id: '/', label: '홈', icon: <Home size={20} strokeWidth={1.5} /> },
+        { id: '/market', label: '마켓', icon: <ShoppingBag size={20} strokeWidth={1.5} /> },
+        { id: '/lab', label: '실험실', icon: <FlaskConical size={20} strokeWidth={1.5} /> },
+        { id: '/vault', label: '마이페이지', icon: <User size={20} strokeWidth={1.5} /> }
     ];
 
     return (

@@ -1,6 +1,7 @@
 "use client";
 
 import { historyItems } from '../data/mockdata';
+import { User, Bell, ScrollText, LockKeyhole } from 'lucide-react';
 
 export default function VaultPage() {
     return (
@@ -11,7 +12,7 @@ export default function VaultPage() {
             <div className="bg-[#004D40] rounded-2xl p-6 lg:p-8 mb-8 shadow-lg">
                 <div className="flex items-center gap-4 lg:gap-6 mb-6">
                     <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-white/10 flex items-center justify-center text-2xl lg:text-3xl backdrop-blur-sm">
-                        👤
+                        <User size={30} strokeWidth={3} color='#FFFFFF'/>
                     </div>
                     <div>
                         <div className="text-white text-[18px] lg:text-[24px] font-bold mb-1">내 피부</div>
@@ -58,10 +59,10 @@ export default function VaultPage() {
                     <h3 className="hidden lg:block text-[18px] font-bold text-[#1C1C1E] mb-4">설정</h3>
                     <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
                         {[
-                            { icon: '👤', label: '프로필 수정' },
-                            { icon: '🔔', label: '알림 설정' },
-                            { icon: '📋', label: '이용약관' },
-                            { icon: '🔒', label: '개인정보처리방침' }
+                            { icon: <User size={20} strokeWidth={2.5} />, label: '프로필 수정' },
+                            { icon: <Bell size={20} strokeWidth={2.5} />, label: '알림 설정' },
+                            { icon: <ScrollText size={20} strokeWidth={2.5} />, label: '이용약관' },
+                            { icon: <LockKeyhole size={20} strokeWidth={2.5} />, label: '개인정보처리방침' }
                         ].map((item, i, arr) => (
                             <button
                                 key={i}

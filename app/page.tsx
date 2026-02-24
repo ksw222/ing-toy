@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import { Search } from 'lucide-react';
 
 export default function Home() {
     const trendingSearches = ['레티놀', '비타민C', '나이아신아마이드', 'AHA', 'BHA'];
@@ -58,7 +59,7 @@ export default function Home() {
 
                         <div className="relative max-w-2xl bg-[#F2F2F7] rounded-xl p-1">
                             <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-lg shadow-sm">
-                                <span className="text-xl">🔍</span>
+                                <span className="text-xl"><Search size={20} strokeWidth={3} color='#004D40'/></span>
                                 <input 
                                     type="text" 
                                     placeholder="성분 또는 제품 검색" 
