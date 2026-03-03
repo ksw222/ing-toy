@@ -108,6 +108,55 @@ export const historyItems = [
 
 export const detailedProducts = [
     {
+        id: 1,
+        name: "어드밴스드 스네일 96 뮤신 파워 에센스",
+        brand: "COSRX",
+        category: "세럼",
+        price: 21800,
+        matchScore: 98,
+        ingredients: [
+            { name: "달팽이점액여과물", grade: "green", effect: "피부 재생 및 보습" },
+            { name: "판테놀", grade: "green", effect: "장벽 강화" },
+            { name: "히알루론산나트륨", grade: "green", effect: "수분 공급" },
+            { name: "알란토인", grade: "green", effect: "진정" }
+        ],
+        caution: [],
+        description: "달팽이 점액이 96% 함유되어 피부 활력을 찾아주는 고농축 에센스입니다.",
+        alternative: { name: "믹순 콩 에센스", similarity: 92 }
+    },
+    {
+        id: 4,
+        name: "레티놀 세럼",
+        brand: "SOME BY MI",
+        category: "세럼",
+        price: 23400,
+        matchScore: 89,
+        ingredients: [
+            { name: "레티놀", grade: "yellow", effect: "주름 개선" },
+            { name: "바쿠치올", grade: "green", effect: "식물성 레티놀 유사체" },
+            { name: "세라마이드", grade: "green", effect: "보습" }
+        ],
+        caution: ["임산부 사용 주의", "낮 시간 사용 시 자외선 차단 필수"],
+        description: "초보자도 사용하기 쉬운 저자극 레티놀 세럼입니다.",
+        alternative: { name: "이니스프리 레티놀 시카", similarity: 94 }
+    },
+    {
+        id: 5,
+        name: "센텔라 앰플",
+        brand: "아누아",
+        category: "앰플",
+        price: 15300,
+        matchScore: 96,
+        ingredients: [
+            { name: "병풀추출물", grade: "green", effect: "강력 진정" },
+            { name: "부틸렌글라이콜", grade: "green", effect: "수분 저장" },
+            { name: "마데카소사이드", grade: "green", effect: "피부 재생" }
+        ],
+        caution: [],
+        description: "붉은 기 진정에 탁월한 고순도 센텔라 성분 앰플입니다.",
+        alternative: { name: "스킨1004 센텔라 앰플", similarity: 97 }
+    },
+    {
         id: 101,
         name: "히알루론산 수분 세럼",
         brand: "INGG Lab",
@@ -165,7 +214,7 @@ export const ingredientGroups = {
 
 // 2. 유저 확장 목데이터 (회원 정보 및 보관함 관리용)
 export const mockUser = {
-  name: "이기성", //
+  name: "김잉그", //
   age: 24, //
   major: "통계학", //
   skinType: "지복합성",
