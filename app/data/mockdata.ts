@@ -142,3 +142,55 @@ export const detailedProducts = [
         alternative: { name: "바쿠치올 저자극 크림", similarity: 85 }
     }
 ];
+
+// 1. 성분 효과별 그룹화 데이터 (리포트 분석용)
+export const ingredientGroups = {
+  moisture: { 
+    label: "수분/보습", 
+    ingredients: ["히알루론산", "글리세린", "부틸렌글라이콜", "호호바오일", "스쿠알란"] 
+  },
+  soothing: { 
+    label: "진정/재생", 
+    ingredients: ["판테놀", "병풀추출물", "마데카소사이드", "달팽이점액 96%", "센텔라 100%"] 
+  },
+  brightening: { 
+    label: "미백/광채", 
+    ingredients: ["나이아신아마이드", "비타민C", "비타민C 23%"] 
+  },
+  antiaging: { 
+    label: "탄력/주름", 
+    ingredients: ["레티놀", "아데노신", "펩타이드", "세라마이드", "레티놀 0.1%"] 
+  }
+};
+
+// 2. 유저 확장 목데이터 (회원 정보 및 보관함 관리용)
+export const mockUser = {
+  name: "이기성", //
+  age: 24, //
+  major: "통계학", //
+  skinType: "지복합성",
+  preferences: ["진정", "수분", "피지조절"],
+  mbti: "HSPC (High-Soothing, Pro-Centella)", // 성분 MBTI 결과 예시
+  
+  // 유저의 화장품 보관함 데이터 (sampleProducts의 id와 매칭)
+  ownedProducts: [
+    {
+      id: 1, // 어드밴스드 스네일 에센스
+      feedback: "끈적임 없이 수분감이 오래가서 만족스러워요.",
+      rating: 5,
+      addedDate: "2026-02-15"
+    },
+    {
+      id: 4, // 레티놀 세럼
+      feedback: "처음엔 약간 자극이 있었지만 피부결이 매끄러워졌습니다.",
+      rating: 4,
+      addedDate: "2026-03-01"
+    },
+    {
+      id: 5, // 센텔라 앰플
+      feedback: "붉은 기 진정에 효과를 많이 봤어요.",
+      rating: 5,
+      addedDate: "2026-03-02"
+    }
+  ]
+};

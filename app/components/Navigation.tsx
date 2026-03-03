@@ -6,14 +6,6 @@ import { Home, ShoppingBag, FlaskConical, User } from 'lucide-react';
 
 export function Navigation() {
     const pathname = usePathname();
-
-    // const navItems = [
-    //     { id: '/', label: '홈', icon: '🏠' },
-    //     { id: '/market', label: '마켓', icon: '🛍️' },
-    //     { id: '/lab', label: '실험실', icon: '🧪' },
-    //     { id: '/vault', label: '마이페이지', icon: '👤' }
-    // ];
-    // navItems 배열 수정
     const navItems = [
         { id: '/', label: '홈', icon: <Home size={20} strokeWidth={1.5} /> },
         { id: '/market', label: '마켓', icon: <ShoppingBag size={20} strokeWidth={1.5} /> },
@@ -47,9 +39,11 @@ export function Navigation() {
                                 ))}
                             </div>
                         </div>
-                        <button className="px-4 py-2 bg-[#004D40] hover:bg-[#003D33] text-white text-[14px] font-medium rounded-lg transition-colors shadow-sm hover:shadow-md">
-                            로그인
-                        </button>
+                        <Link href="/login">
+                            <button className="px-4 py-2 bg-[#004D40] hover:bg-[#003D33] text-white text-[14px] font-medium rounded-lg transition-colors shadow-sm hover:shadow-md">
+                                로그인
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </nav>

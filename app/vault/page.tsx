@@ -1,87 +1,86 @@
 "use client";
 
-import { historyItems } from '../data/mockdata';
-import { User, Bell, ScrollText, LockKeyhole } from 'lucide-react';
+import { mockUser, sampleProducts } from '../data/mockdata';
+import Link from 'next/link';
+import { Package, ChevronRight, Star, Settings2, UserCircle, ShieldCheck, PieChart } from 'lucide-react';
 
 export default function VaultPage() {
-    return (
-        <div className="max-w-6xl mx-auto px-5 lg:px-6 pt-8 lg:pt-12">
-            <h2 className="text-[24px] lg:text-[32px] font-bold text-[#1C1C1E] mb-6">마이</h2>
+    const myProducts = mockUser.ownedProducts.map(owned => ({
+        ...sampleProducts.find(p => p.id === owned.id),
+        ...owned
+    }));
 
-            {/* 프로필 카드 */}
-            <div className="bg-[#004D40] rounded-2xl p-6 lg:p-8 mb-8 shadow-lg">
-                <div className="flex items-center gap-4 lg:gap-6 mb-6">
-                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-white/10 flex items-center justify-center text-2xl lg:text-3xl backdrop-blur-sm">
-                        <User size={30} strokeWidth={3} color='#FFFFFF'/>
+    return (
+        <div className="max-w-4xl mx-auto px-5 pt-12 pb-24">
+            {/* 1. 프로필 섹션 (수정 버튼 포함) */}
+            <div className="bg-white border border-gray-100 rounded-[40px] p-8 lg:p-10 mb-8 shadow-sm flex items-center justify-between">
+                <div className="flex items-center gap-6">
+                    <div className="w-20 h-20 bg-[#F2F2F7] rounded-[32px] flex items-center justify-center text-[#004D40]">
+                        <UserCircle size={48} strokeWidth={1} />
                     </div>
                     <div>
-                        <div className="text-white text-[18px] lg:text-[24px] font-bold mb-1">내 피부</div>
-                        <div className="text-white/80 text-[13px] lg:text-[14px]">지성 · 민감성</div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <h2 className="text-[22px] font-bold text-[#1C1C1E]">{mockUser.name}님</h2>
+                            <span className="px-2 py-0.5 bg-[#004D40]/10 text-[#004D40] text-[11px] font-bold rounded-full">LV.1 분석가</span>
+                        </div>
+                        <p className="text-[14px] text-[#8E8E93]">{mockUser.skinType} · {mockUser.age}세</p>
                     </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
-                    {['분석 12', '제품 8', '성분 45'].map((stat, i) => (
-                        <div key={i} className="text-center py-2 lg:py-4 bg-white/5 rounded-xl backdrop-blur-sm">
-                            <div className="text-white text-[24px] lg:text-[32px] font-bold mb-1">{stat.split(' ')[1]}</div>
-                            <div className="text-white/70 text-[11px] lg:text-[13px]">{stat.split(' ')[0]}</div>
-                        </div>
+                <Link href="/vault/edit">
+                    <button className="px-5 py-2.5 bg-[#F2F2F7] hover:bg-[#E8E8E8] text-[#1C1C1E] text-[13px] font-bold rounded-2xl transition-all">
+                        프로필 수정
+                    </button>
+                </Link>
+            </div>
+
+            {/* 2. 데이터 요약 카드 (애플 스타일 위젯) */}
+            <div className="grid grid-cols-2 gap-4 mb-10">
+                <Link href="/lab/report" className="bg-[#004D40] rounded-[32px] p-6 text-white group overflow-hidden relative">
+                    <PieChart className="absolute -right-2 -bottom-2 opacity-10 group-hover:scale-110 transition-transform" size={80} />
+                    <h4 className="text-[13px] font-bold text-white/60 mb-1">성분 분석 스코어</h4>
+                    <div className="text-[24px] font-black">{mockUser.mbti.split(' ')[0]}</div>
+                </Link>
+                <div className="bg-white border border-gray-100 rounded-[32px] p-6">
+                    <h4 className="text-[13px] font-bold text-[#8E8E93] mb-1">보관 중인 데이터</h4>
+                    <div className="text-[24px] font-black text-[#1C1C1E]">{myProducts.length}개 제품</div>
+                </div>
+            </div>
+
+            {/* 3. 내 화장품 보관함 (메인 섹션) */}
+            <div className="mb-10">
+                <div className="flex justify-between items-center px-2 mb-4">
+                    <h3 className="text-[18px] font-bold text-[#1C1C1E]">나의 데이터 보관함</h3>
+                    <Link href="/signup/input" className="text-[13px] font-bold text-[#004D40]">+ 추가</Link>
+                </div>
+                <div className="space-y-3">
+                    {myProducts.map((product: any) => (
+                        <Link key={product.id} href={`/vault/${product.id}`}>
+                            <div className="bg-white border border-gray-50 rounded-[28px] p-5 flex items-center justify-between hover:bg-[#F9F9FB] transition-all group">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-[#F2F2F7] rounded-xl flex items-center justify-center text-[#004D40] group-hover:bg-[#004D40] group-hover:text-white transition-all">
+                                        <Package size={20} />
+                                    </div>
+                                    <div>
+                                        <div className="text-[15px] font-bold text-[#1C1C1E]">{product.name}</div>
+                                        <div className="text-[12px] text-[#2ECC71] font-bold">매칭 {product.match}%</div>
+                                    </div>
+                                </div>
+                                <ChevronRight size={18} className="text-[#D1D1D6]" />
+                            </div>
+                        </Link>
                     ))}
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* 최근 분석 기록 */}
-                <div className="col-span-1 lg:col-span-2">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-[16px] lg:text-[18px] font-bold text-[#1C1C1E]">최근 분석</h3>
-                        <button className="text-[13px] text-[#004D40] font-medium hover:underline">전체보기</button>
-                    </div>
-                    <div className="space-y-3">
-                        {historyItems.map((item, i) => (
-                            <div key={i} className="bg-white border border-gray-200 rounded-xl p-4 lg:p-5 flex justify-between items-center hover:shadow-md transition-shadow">
-                                <div>
-                                    <div className="text-[14px] lg:text-[16px] font-bold text-[#1C1C1E] mb-1">{item.ing}</div>
-                                    <div className="text-[11px] lg:text-[12px] text-[#8E8E93]">{item.date} {item.time}</div>
-                                </div>
-                                <div className={`w-8 h-8 lg:w-10 lg:h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm lg:text-base ${
-                                    item.status === 'safe' ? 'bg-[#2ECC71]' : 
-                                    item.status === 'danger' ? 'bg-[#E74C3C]' : 'bg-[#F39C12]'
-                                }`}>
-                                    {item.status === 'safe' ? '✓' : item.status === 'danger' ? '×' : '!'}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* 설정 메뉴 */}
-                <div>
-                    <h3 className="hidden lg:block text-[18px] font-bold text-[#1C1C1E] mb-4">설정</h3>
-                    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-                        {[
-                            { icon: <User size={20} strokeWidth={2.5} />, label: '프로필 수정' },
-                            { icon: <Bell size={20} strokeWidth={2.5} />, label: '알림 설정' },
-                            { icon: <ScrollText size={20} strokeWidth={2.5} />, label: '이용약관' },
-                            { icon: <LockKeyhole size={20} strokeWidth={2.5} />, label: '개인정보처리방침' }
-                        ].map((item, i, arr) => (
-                            <button
-                                key={i}
-                                className={`w-full flex items-center justify-between px-5 py-4 hover:bg-[#F2F2F7] active:bg-[#F2F2F7] transition-colors ${
-                                    i !== arr.length - 1 ? 'border-b border-gray-200' : ''
-                                }`}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <span className="text-[18px] lg:text-[20px]">{item.icon}</span>
-                                    <span className="text-[14px] font-medium text-[#1C1C1E]">{item.label}</span>
-                                </div>
-                                <span className="text-[#8E8E93]">›</span>
-                            </button>
-                        ))}
-                    </div>
-                    <div className="mt-8 text-center lg:hidden">
-                        <p className="text-[11px] text-[#8E8E93]">ING v1.0.0</p>
-                    </div>
-                </div>
+            {/* 4. 기타 설정 메뉴 (토스 스타일) */}
+            <div className="bg-white border border-gray-100 rounded-[32px] overflow-hidden">
+                <button className="w-full px-8 py-5 flex items-center justify-between hover:bg-[#F9F9FB] transition-colors border-b border-gray-50">
+                    <span className="text-[15px] font-medium text-[#48484A]">알림 설정</span>
+                    <ChevronRight size={16} className="text-[#D1D1D6]" />
+                </button>
+                <button className="w-full px-8 py-5 flex items-center justify-between hover:bg-[#F9F9FB] transition-colors">
+                    <span className="text-[15px] font-medium text-[#E74C3C]">로그아웃</span>
+                </button>
             </div>
         </div>
     );
