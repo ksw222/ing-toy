@@ -12,7 +12,7 @@ export default function LoginPage() {
         <div className="max-w-md mx-auto px-6 pt-20 pb-10">
             <div className="mb-12">
                 <h2 className="text-[32px] font-bold text-[#1C1C1E] leading-tight mb-2">반가워요!<br/>다시 오셨네요.</h2>
-                <p className="text-[16px] text-[#8E8E93]">데이터 기반 성분 분석 플랫폼, INGG</p>
+                <p className="text-[16px] text-[#8E8E93]">데이터 기반 성분 분석 플랫폼, ING</p>
             </div>
 
             <div className="space-y-4 mb-10">
