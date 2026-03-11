@@ -101,7 +101,7 @@ export default function VaultPage() {
                         <div className="bg-white border border-gray-100 rounded-[32px] overflow-hidden shadow-sm">
                             <div className="px-8 py-6 border-b border-gray-50 flex justify-between items-center">
                                 <span className="text-[16px] font-bold text-[#1C1C1E]">분석된 화장품 리스트</span>
-                                <Link href="/signup/input" className="p-2 bg-[#004D40] text-white rounded-full">
+                                <Link href="/vault/add" className="p-2 bg-[#004D40] text-white rounded-full">
                                     <Plus size={16} />
                                 </Link>
                             </div>
@@ -134,11 +134,11 @@ export default function VaultPage() {
                         <div className="bg-[#F2F2F7] rounded-[32px] p-8">
                             <h4 className="text-[18px] font-bold text-[#1C1C1E] mb-4">지복합성 피부를 위한 팁</h4>
                             <p className="text-[15px] text-[#48484A] leading-relaxed mb-6">
-                                기성님처럼 통계학을 전공하신 분들은 데이터의 정밀함을 아시죠. 현재 루틴에서 **판테놀** 성분이 부족하면 유수분 밸런스가 쉽게 무너집니다.
+                                잉그님처럼 통계학을 전공하신 분들은 데이터의 정밀함을 아시죠. 현재 루틴에서 판테놀 성분이 부족하면 유수분 밸런스가 쉽게 무너집니다. 신경쓰세요.
                             </p>
                             <Link href="/lab/report">
                                 <button className="w-full py-4 bg-white text-[#004D40] rounded-2xl font-bold text-[14px] shadow-sm hover:shadow-md transition-all">
-                                    전체 분석 리포트 확인
+                                    나의 분석 리포트 확인
                                 </button>
                             </Link>
                         </div>
