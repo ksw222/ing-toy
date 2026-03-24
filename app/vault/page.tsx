@@ -24,7 +24,7 @@ export default function VaultPage() {
         <div className="bg-[#F8F9FA] min-h-screen">
             <div className="max-w-7xl mx-auto px-5 lg:px-10 pt-10 lg:pt-16 pb-24">
                 
-                {/* [SECTION 1] 유저 프로필 및 요약 - 다크 그린을 과감하게 사용 */}
+                {/* [SECTION 1] 유저 프로필 및 요약 - 다크 그린 사용 */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
                     <div className="lg:col-span-8 bg-[#004D40] rounded-[40px] p-8 lg:p-12 text-white shadow-xl relative overflow-hidden group">
                         <Database className="absolute right-[-20px] bottom-[-20px] opacity-10 group-hover:scale-110 transition-transform duration-700" size={200} />
@@ -37,9 +37,9 @@ export default function VaultPage() {
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
                                         <h2 className="text-[28px] font-bold tracking-tight">{mockUser.name}</h2>
-                                        <span className="px-3 py-1 bg-[#2ECC71] text-white text-[11px] font-bold rounded-full">PRO 분석가</span>
+                                        <span className="px-3 py-1 bg-[#2ECC71] text-white text-[11px] font-bold rounded-full">PRO</span>
                                     </div>
-                                    <p className="text-white/70 font-medium">{mockUser.skinType} · {mockUser.age}세 · {mockUser.major} 전공</p>
+                                    <p className="text-white/70 font-medium">{mockUser.skinType} · {mockUser.age}세 </p>
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-8 border-l border-white/10 pl-8">
@@ -103,6 +103,13 @@ export default function VaultPage() {
                                 <span className="text-[16px] font-bold text-[#1C1C1E]">분석된 화장품 리스트</span>
                                 <Link href="/vault/add" className="p-2 bg-[#004D40] text-white rounded-full">
                                     <Plus size={16} />
+                                </Link>
+                                {/* 새롭게 추가하는 보관함 이동 단추 */}
+                                <Link 
+                                href="/vault/list" 
+                                className="border border-green-600 text-green-600 px-5 py-3 rounded-lg font-medium hover:bg-green-50 transition-colors flex items-center justify-center"
+                                >
+                                내 화장품 보관함
                                 </Link>
                             </div>
                             <div className="divide-y divide-gray-50">
