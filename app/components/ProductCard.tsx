@@ -21,17 +21,20 @@ type ProductCardProduct = {
 type ProductCardProps = {
   product: ProductCardProduct;
   variant?: "default" | "recommendation";
+  size?: "regular" | "compact";
 };
 
 export function ProductCard({
   product,
   variant = "default",
+  size = "regular",
 }: ProductCardProps) {
   const discount = product.originalPrice
     ? Math.round((1 - product.price / product.originalPrice) * 100)
     : 0;
 
   const isRecommendation = variant === "recommendation";
+  const isCompact = size === "compact";
 
   return (
     <Link href={`/market/${product.id}`} className="block h-full">
@@ -63,28 +66,46 @@ export function ProductCard({
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/5 group-hover:scale-105 transition-transform duration-300" />
         </div>
 
-        <div className="p-4 relative bg-white">
+        <div className={`${isCompact ? "p-3" : "p-4"} relative bg-white`}>
           <div className="text-[11px] text-[#8E8E93] mb-1">{product.brand}</div>
-          <h3 className="text-[14px] font-semibold text-[#1C1C1E] mb-2 leading-tight min-h-[40px]">
+          <h3
+            className={`${
+              isCompact ? "text-[13px] min-h-[36px]" : "text-[14px] min-h-[40px]"
+            } font-semibold text-[#1C1C1E] mb-2 leading-tight`}
+          >
             {product.name}
           </h3>
 
           {isRecommendation ? (
             <>
               {product.recommendedFor && product.recommendedFor.length > 0 && (
-                <div className="text-[11px] font-medium text-[#004D40] mb-2">
+                <div className="text-[11px] font-semibold text-[#004D40] mb-2">
                   추천 대상: {product.recommendedFor.join(" · ")}
                 </div>
               )}
               {product.recommendReason && (
-                <p className="text-[12px] leading-5 text-[#48484A] mb-3 min-h-[60px]">
+                <p
+                  className={`${
+                    isCompact ? "text-[11px] min-h-[48px]" : "text-[12px] min-h-[60px]"
+                  } leading-5 text-[#48484A] mb-3`}
+                >
                   {product.recommendReason}
                 </p>
               )}
               {product.caution && (
-                <p className="text-[11px] leading-4 text-[#8E8E93] mb-3">
+                <p className={`${isCompact ? "text-[10px]" : "text-[11px]"} leading-4 text-[#8E8E93] mb-3`}>
                   주의 포인트: {product.caution}
                 </p>
+              )}
+              {isCompact && (
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[11px] font-semibold text-[#1C1C1E]">
+                    {product.price.toLocaleString()}원
+                  </span>
+                  {discount > 0 && (
+                    <span className="text-[11px] font-semibold text-[#E74C3C]">{discount}%</span>
+                  )}
+                </div>
               )}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1">
@@ -96,7 +117,7 @@ export function ProductCard({
                     ({product.reviewCount.toLocaleString()})
                   </span>
                 </div>
-                <span className="text-[12px] font-medium text-[#004D40]">
+                <span className="text-[12px] font-semibold text-[#004D40]">
                   상세 분석 보기
                 </span>
               </div>

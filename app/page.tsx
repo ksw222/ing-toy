@@ -141,23 +141,23 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-5 lg:px-6 pt-8 lg:pt-12 pb-24 space-y-10 lg:space-y-14">
+    <div className="max-w-7xl mx-auto px-5 lg:px-6 pt-8 lg:pt-12 pb-24 space-y-10 lg:space-y-14 text-[#1C1C1E]">
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         <div className="lg:col-span-7">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#F2F2F7] rounded-full mb-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#F6F7F8] border border-gray-100 rounded-full mb-5">
             <div className="w-1.5 h-1.5 rounded-full bg-[#2ECC71]" />
-            <span className="text-[12px] font-medium text-[#6B6B6B]">
+            <span className="text-[12px] font-semibold text-[#6B6B6B]">
               Ingredient-first skincare exploration
             </span>
           </div>
 
-          <h1 className="text-[30px] lg:text-[46px] font-bold leading-[1.14] tracking-[-0.03em] text-[#1C1C1E] mb-4">
+          <h1 className="text-[30px] lg:text-[46px] font-bold leading-[1.14] tracking-[-0.03em] text-[#111111] mb-4">
             내 피부에 맞는 화장품을
             <br />
             성분 기준으로 찾으세요
           </h1>
 
-          <p className="max-w-2xl text-[15px] lg:text-[17px] leading-7 text-[#6B6B6B]">
+          <p className="max-w-2xl text-[15px] lg:text-[17px] leading-7 text-[#5B5B60]">
             피부타입과 고민에 맞는 제품을 바로 탐색하고, 지금 쓰는 제품도 간단하게
             분석해보세요. ING는 추천 이유까지 함께 보여주는 성분 중심 탐색
             서비스입니다.
@@ -165,22 +165,22 @@ export default function Home() {
         </div>
 
         <div className="lg:col-span-5">
-          <div className="bg-[#004D40] rounded-[28px] lg:rounded-[32px] p-6 lg:p-7 text-white h-full flex flex-col justify-between shadow-lg">
+          <div className="bg-[#004D40] rounded-[28px] lg:rounded-[32px] p-6 lg:p-7 text-white h-full flex flex-col justify-between shadow-[0_16px_40px_rgba(0,77,64,0.18)]">
             <div>
-              <div className="text-[12px] font-bold text-white/70 mb-3">빠른 시작</div>
+              <div className="text-[12px] font-semibold text-white/70 mb-3">빠른 시작</div>
               <h2 className="text-[22px] lg:text-[26px] font-bold leading-tight mb-3">
                 지금 쓰는 제품이
                 <br />
                 괜찮은지 확인해보세요
               </h2>
-              <p className="text-[14px] leading-6 text-white/75">
+              <p className="text-[14px] leading-6 text-white/78">
                 제품명이나 브랜드를 입력하면 바로 탐색을 시작할 수 있어요.
               </p>
             </div>
 
             <div className="mt-6 space-y-3">
-              <div className="bg-white/10 rounded-2xl p-4">
-                <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-sm">
+              <div className="bg-white/10 rounded-2xl p-4 border border-white/10">
+                <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-[0_6px_20px_rgba(0,77,64,0.12)]">
                   <Search size={18} strokeWidth={2.5} color="#004D40" />
                   <input
                     value={query}
@@ -192,11 +192,11 @@ export default function Home() {
                     }}
                     type="text"
                     placeholder="제품명 또는 브랜드명을 입력하세요"
-                    className="flex-1 bg-transparent outline-none text-[14px] text-[#1C1C1E] placeholder:text-[#8E8E93]"
+                    className="flex-1 bg-transparent outline-none text-[14px] text-[#1C1C1E] placeholder:text-[#9A9AA0]"
                   />
                   <button
                     onClick={handleAnalyze}
-                    className="px-4 py-2 bg-[#004D40] hover:bg-[#003D33] text-white rounded-lg text-[13px] font-medium transition-colors"
+                    className="px-4 py-2 bg-[#004D40] hover:bg-[#003D33] text-white rounded-lg text-[13px] font-semibold transition-colors"
                   >
                     분석해보기
                   </button>
@@ -208,7 +208,7 @@ export default function Home() {
                   <button
                     key={item}
                     onClick={() => handleSuggestionClick(item)}
-                    className="px-3 py-2 rounded-full bg-white/10 hover:bg-white/15 text-[12px] font-medium text-white transition-colors"
+                    className="px-3 py-2 rounded-full bg-white/10 hover:bg-white/20 text-[12px] font-semibold text-white transition-colors"
                   >
                     {item}
                   </button>
@@ -219,7 +219,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#F8F8FA] border border-gray-100 rounded-[28px] lg:rounded-[32px] p-5 lg:p-7">
+      <section className="bg-[#F7F8F9] border border-gray-100 rounded-[28px] lg:rounded-[32px] p-5 lg:p-7">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           <div className="lg:col-span-7 space-y-5">
             <div>
@@ -236,7 +236,7 @@ export default function Home() {
                       onClick={() => setSelectedFilter(filter)}
                       className={`px-4 py-2 rounded-full text-[13px] font-medium transition-colors ${
                         isActive
-                          ? "bg-[#004D40] text-white"
+                          ? "bg-[#004D40] text-white shadow-[0_6px_18px_rgba(0,77,64,0.18)]"
                           : "bg-white text-[#1C1C1E] border border-gray-200 hover:border-[#004D40]/30"
                       }`}
                     >
@@ -273,17 +273,17 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="lg:col-span-5 bg-white rounded-[24px] border border-gray-100 p-5 lg:p-6">
-            <div className="text-[12px] font-bold text-[#8E8E93] mb-3">지금 보고 있는 탐색 조건</div>
+          <div className="lg:col-span-5 bg-white rounded-[24px] border border-gray-100 p-5 lg:p-6 shadow-[0_10px_30px_rgba(15,61,53,0.08)]">
+            <div className="text-[12px] font-semibold text-[#8E8E93] mb-3">지금 보고 있는 탐색 조건</div>
             <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-3 py-1.5 rounded-full bg-[#F2F2F7] text-[12px] font-medium text-[#1C1C1E]">
+              <span className="px-3 py-1.5 rounded-full bg-[#F3F4F6] text-[12px] font-semibold text-[#1C1C1E]">
                 피부: {selectedFilter === "all" ? "전체" : selectedFilter}
               </span>
-              <span className="px-3 py-1.5 rounded-full bg-[#F2F2F7] text-[12px] font-medium text-[#1C1C1E]">
+              <span className="px-3 py-1.5 rounded-full bg-[#F3F4F6] text-[12px] font-semibold text-[#1C1C1E]">
                 브랜드: {selectedBrand ?? "전체"}
               </span>
             </div>
-            <p className="text-[14px] leading-6 text-[#6B6B6B]">
+            <p className="text-[14px] leading-6 text-[#5B5B60]">
               빠르게 조건을 바꾸며 둘러보고, 마음에 드는 제품은 상세 분석으로
               이어서 확인해보세요.
             </p>
@@ -297,13 +297,13 @@ export default function Home() {
             <h2 className="text-[22px] lg:text-[28px] font-bold text-[#1C1C1E] mb-2">
               내 피부 고민으로 먼저 둘러보세요
             </h2>
-            <p className="text-[14px] lg:text-[15px] text-[#6B6B6B]">
+            <p className="text-[14px] lg:text-[15px] text-[#5B5B60]">
               추천 이유가 보이는 카드로 빠르게 비교할 수 있어요.
             </p>
           </div>
           <Link
             href="/market"
-            className="hidden lg:inline-flex items-center gap-2 text-[14px] font-medium text-[#004D40]"
+            className="hidden lg:inline-flex items-center gap-2 text-[14px] font-semibold text-[#004D40]"
           >
             전체 제품 보기
             <ArrowRight size={16} />
@@ -319,21 +319,21 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-white border border-gray-200 rounded-[28px] lg:rounded-[32px] p-6 lg:p-8">
+      <section className="bg-white border border-gray-200 rounded-[28px] lg:rounded-[32px] p-6 lg:p-8 shadow-[0_14px_30px_rgba(15,61,53,0.08)]">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
           <div className="lg:col-span-8">
-            <div className="text-[12px] font-bold text-[#8E8E93] mb-3">더 정확한 추천</div>
+            <div className="text-[12px] font-semibold text-[#8E8E93] mb-3">더 정확한 추천</div>
             <h2 className="text-[22px] lg:text-[28px] font-bold text-[#1C1C1E] mb-3">
               더 정확한 추천이 필요하신가요?
             </h2>
-            <p className="text-[14px] lg:text-[15px] leading-7 text-[#6B6B6B]">
+            <p className="text-[14px] lg:text-[15px] leading-7 text-[#5B5B60]">
               피부타입과 고민을 바탕으로 더 정밀한 추천과 분석을 받아보세요.
             </p>
           </div>
           <div className="lg:col-span-4">
             <Link
               href="/market"
-              className="inline-flex items-center justify-center w-full px-5 py-4 bg-[#004D40] hover:bg-[#003D33] text-white rounded-2xl text-[14px] font-bold transition-colors shadow-sm"
+              className="inline-flex items-center justify-center w-full px-5 py-4 bg-[#004D40] hover:bg-[#003D33] text-white rounded-2xl text-[14px] font-semibold transition-colors shadow-[0_14px_28px_rgba(0,77,64,0.2)]"
             >
               내 피부에 맞는 제품 더 찾기
             </Link>
@@ -342,23 +342,23 @@ export default function Home() {
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-        <div className="lg:col-span-5 bg-[#004D40] rounded-[28px] lg:rounded-[32px] p-6 lg:p-8 text-white">
+        <div className="lg:col-span-5 bg-[#004D40] rounded-[28px] lg:rounded-[32px] p-6 lg:p-8 text-white shadow-[0_16px_40px_rgba(0,77,64,0.2)]">
           <div className="text-[12px] font-bold text-white/65 mb-3">WHY ING</div>
           <h2 className="text-[22px] lg:text-[28px] font-bold leading-tight mb-3">
             ING는 이렇게 추천해요
           </h2>
-          <p className="text-[14px] leading-7 text-white/75">
+          <p className="text-[14px] leading-7 text-white/78">
             단순히 제품을 나열하지 않고, 피부 조건과 성분 해석을 함께 보여주는
             흐름을 만드는 데 집중합니다.
           </p>
         </div>
 
-        <div className="lg:col-span-7 bg-[#F8F8FA] border border-gray-100 rounded-[28px] lg:rounded-[32px] p-6 lg:p-8">
+        <div className="lg:col-span-7 bg-[#F7F8F9] border border-gray-100 rounded-[28px] lg:rounded-[32px] p-6 lg:p-8 shadow-[0_10px_24px_rgba(17,17,17,0.06)]">
           <div className="space-y-4">
             {helperSteps.map((step) => (
               <div
                 key={step}
-                className="bg-white rounded-2xl border border-gray-100 px-5 py-4 text-[14px] lg:text-[15px] text-[#1C1C1E]"
+                className="bg-white rounded-2xl border border-gray-100 px-5 py-4 text-[14px] lg:text-[15px] text-[#1C1C1E] shadow-[0_8px_20px_rgba(17,17,17,0.06)]"
               >
                 {step}
               </div>
@@ -372,7 +372,7 @@ export default function Home() {
           <h2 className="text-[20px] lg:text-[24px] font-bold text-[#1C1C1E] mb-2">
             다른 기능도 함께 활용해보세요
           </h2>
-          <p className="text-[14px] lg:text-[15px] text-[#6B6B6B]">
+          <p className="text-[14px] lg:text-[15px] text-[#5B5B60]">
             핵심 탐색 흐름 아래에서 필요한 도구만 가볍게 이어갈 수 있도록 두었습니다.
           </p>
         </div>
@@ -382,14 +382,14 @@ export default function Home() {
             <Link
               key={feature.href}
               href={feature.href}
-              className="bg-white border border-gray-200 rounded-[24px] p-5 lg:p-6 hover:shadow-lg transition-all"
+              className="bg-white border border-gray-200 rounded-[24px] p-5 lg:p-6 hover:shadow-[0_16px_30px_rgba(17,17,17,0.08)] transition-all"
             >
-              <div className="text-[11px] font-bold text-[#8E8E93] uppercase mb-3">
+              <div className="text-[11px] font-semibold text-[#8E8E93] uppercase mb-3">
                 {feature.eyebrow}
               </div>
               <h3 className="text-[18px] font-bold text-[#1C1C1E] mb-2">{feature.title}</h3>
-              <p className="text-[13px] leading-6 text-[#6B6B6B] mb-4">{feature.description}</p>
-              <div className="inline-flex items-center gap-2 text-[13px] font-medium text-[#004D40]">
+              <p className="text-[13px] leading-6 text-[#5B5B60] mb-4">{feature.description}</p>
+              <div className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#004D40]">
                 바로 가기
                 <ArrowRight size={15} />
               </div>

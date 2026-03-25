@@ -1,93 +1,270 @@
 "use client";
 
-import { useParams } from 'next/navigation';
-import { sampleProducts } from '../../data/mockdata';
-import Link from 'next/link';
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { ArrowUpRight, ChevronLeft } from "lucide-react";
+
+import { detailedProducts, sampleProducts } from "../../data/mockdata";
 
 export default function ProductDetailPage() {
-    const params = useParams();
-    // 실제로는 params.id로 DB에서 가져오겠지만, 일단 mockdata에서 찾습니다.
-    const product = sampleProducts.find(p => p.id === Number(params.id)) || sampleProducts[0];
+  const params = useParams();
+  const productId = Number(params.id);
 
-    return (
-        <div className="max-w-7xl mx-auto px-5 lg:px-6 pt-6 lg:pt-10 pb-20">
-            {/* 뒤로가기 버튼 */}
-            <Link href="/market" className="inline-flex items-center text-[#8E8E93] text-[14px] mb-6 hover:text-[#1C1C1E] transition-colors">
-                ← 목록으로 돌아가기
-            </Link>
+  const baseProduct = sampleProducts.find((item) => item.id === productId) ?? sampleProducts[0];
+  const detailProduct =
+    detailedProducts.find((item) => item.id === productId) ??
+    detailedProducts.find((item) => item.id === baseProduct.id) ??
+    detailedProducts[0];
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-                {/* 왼쪽: 제품 이미지 섹션 */}
-                <div className="space-y-4">
-                    <div className="aspect-square bg-[#F8F8F8] rounded-3xl border border-gray-100 flex items-center justify-center overflow-hidden">
-                        {/* 실제 이미지가 들어갈 자리 */}
-                        <span className="text-6xl">🧴</span>
-                    </div>
-                    <div className="grid grid-cols-4 gap-4">
-                        {[1, 2, 3, 4].map((i) => (
-                            <div key={i} className="aspect-square bg-[#F8F8F8] rounded-xl border border-gray-100 cursor-pointer hover:border-[#004D40] transition-colors"></div>
-                        ))}
-                    </div>
-                </div>
+  const alternativeProduct = sampleProducts.find((item) => item.id === detailProduct.alternative.id);
+  const hasStrongCaution = detailProduct.caution.length > 0;
 
-                {/* 오른쪽: 제품 정보 및 분석 섹션 */}
-                <div className="flex flex-col">
-                    <div className="mb-6">
-                        <span className="text-[14px] text-[#004D40] font-bold mb-2 block">{product.brand}</span>
-                        <h1 className="text-[24px] lg:text-[32px] font-bold text-[#1C1C1E] leading-tight mb-4">
-                            {product.name}
-                        </h1>
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="flex items-center gap-1">
-                                <span className="text-[#FFB800] text-lg">★</span>
-                                <span className="text-[16px] font-bold">{product.rating}</span>
-                                <span className="text-[14px] text-[#8E8E93]">({product.reviewCount})</span>
-                            </div>
-                            <div className="px-3 py-1 bg-[#F2F2F7] rounded-full text-[12px] font-bold text-[#2ECC71]">
-                                내 피부 매칭 {product.match}%
-                            </div>
-                        </div>
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-[28px] font-bold text-[#1C1C1E]">{product.price.toLocaleString()}원</span>
-                            <span className="text-[16px] text-[#8E8E93] line-through">{product.originalPrice?.toLocaleString()}원</span>
-                        </div>
-                    </div>
+  return (
+    <div className="max-w-7xl mx-auto px-5 lg:px-6 pt-6 lg:pt-10 pb-24 space-y-8 lg:space-y-10">
+      <Link
+        href="/market"
+        className="inline-flex items-center gap-1 text-[14px] text-[#8E8E93] hover:text-[#1C1C1E] transition-colors"
+      >
+        <ChevronLeft size={16} />
+        추천 제품 목록으로 돌아가기
+      </Link>
 
-                    {/* 핵심 성분 분석 카드 (ResultDisplay 느낌 계승) */}
-                    <div className="bg-[#F2F2F7] rounded-2xl p-6 mb-8">
-                        <h3 className="text-[15px] font-bold text-[#1C1C1E] mb-4 flex items-center gap-2">
-                            <span>🔬</span> 핵심 성분 분석
-                        </h3>
-                        <div className="space-y-3">
-                            {product.mainIngredients.map((ing: string, i: number) => (
-                                <div key={i} className="flex items-center justify-between bg-white p-3 rounded-xl border border-gray-100">
-                                    <span className="text-[14px] font-medium text-[#1C1C1E]">{ing}</span>
-                                    <span className="text-[11px] font-bold text-[#2ECC71]">EWG 1등급</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="flex gap-3">
-                        <button className="flex-1 py-4 bg-[#F2F2F7] text-[#1C1C1E] rounded-xl font-bold hover:bg-[#E8E8E8] transition-colors">
-                            관심상품
-                        </button>
-                        <button className="flex-[2] py-4 bg-[#004D40] text-white rounded-xl font-bold hover:bg-[#003D33] transition-all shadow-lg active:scale-95">
-                            구매하기
-                        </button>
-                    </div>
-                </div>
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        <div className="lg:col-span-5">
+          <div className="bg-white border border-gray-200 rounded-[28px] lg:rounded-[32px] p-5 lg:p-6 shadow-[0_12px_30px_rgba(17,17,17,0.08)]">
+            <div className="aspect-square bg-[#F7F8F9] rounded-2xl border border-gray-100 flex items-center justify-center mb-4">
+              <span className="text-5xl">🧴</span>
             </div>
-
-            {/* 하단 상세 탭 영역 */}
-            <div className="mt-16 border-t border-gray-100 pt-10">
-                <h3 className="text-[20px] font-bold text-[#1C1C1E] mb-6">성분 전체 보기</h3>
-                <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                    <p className="text-[14px] text-[#6B6B6B] leading-relaxed">
-                        정제수, 글리세린, 부틸렌글라이콜, 나이아신아마이드, 1,2-헥산다이올, 판테놀, 센텔라아시아티카추출물, 히알루론산, 세라마이드엔피, 에틸헥실글리세린...
-                    </p>
-                </div>
+            <div className="grid grid-cols-4 gap-3">
+              {[1, 2, 3, 4].map((item) => (
+                <div
+                  key={item}
+                  className="aspect-square bg-[#F7F8F9] rounded-xl border border-gray-100"
+                />
+              ))}
             </div>
+          </div>
         </div>
-    );
+
+        <div className="lg:col-span-7">
+          <div className="bg-[#F8F8FA] border border-gray-100 rounded-[30px] lg:rounded-[36px] p-6 lg:p-8 h-full">
+            <div className="text-[12px] font-bold text-[#004D40] mb-3 uppercase tracking-[0.18em]">
+              Product Judgment
+            </div>
+            <div className="text-[14px] font-bold text-[#004D40] mb-2">{baseProduct.brand}</div>
+            <h1 className="text-[28px] lg:text-[38px] font-bold leading-tight text-[#1C1C1E] mb-4">
+              {baseProduct.name}
+            </h1>
+            <p className="text-[15px] lg:text-[16px] leading-7 text-[#48484A] mb-5 max-w-2xl">
+              {baseProduct.oneLineSummary}
+            </p>
+
+            <div className="flex flex-wrap gap-2 mb-6">
+              {baseProduct.recommendedFor.map((item) => (
+                <span
+                  key={item}
+                  className="px-3 py-1.5 rounded-full bg-white border border-gray-200 text-[12px] font-medium text-[#1C1C1E]"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="bg-white rounded-2xl border border-gray-100 p-4">
+                <div className="text-[11px] font-bold text-[#8E8E93] mb-1">FIT SCORE</div>
+                <div className="text-[24px] font-black text-[#004D40]">{baseProduct.match}%</div>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-4">
+                <div className="text-[11px] font-bold text-[#8E8E93] mb-1">RATING</div>
+                <div className="text-[24px] font-black text-[#1C1C1E]">{baseProduct.rating}</div>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-4">
+                <div className="text-[11px] font-bold text-[#8E8E93] mb-1">PRICE</div>
+                <div className="text-[20px] font-black text-[#1C1C1E]">
+                  {baseProduct.price.toLocaleString()}원
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-4">
+                <div className="text-[11px] font-bold text-[#8E8E93] mb-1">REVIEWS</div>
+                <div className="text-[20px] font-black text-[#1C1C1E]">
+                  {baseProduct.reviewCount.toLocaleString()}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="lg:col-span-5">
+          <div className="bg-[#004D40] rounded-[30px] lg:rounded-[36px] p-6 lg:p-8 text-white h-full flex flex-col justify-between">
+            <div>
+              <div className="text-[12px] font-bold text-white/65 mb-3">구매 전 빠른 판단</div>
+              <h2 className="text-[24px] lg:text-[28px] font-bold leading-tight mb-3">
+                이 제품은
+                <br />
+                {baseProduct.recommendedFor.slice(0, 2).join(" · ")} 피부에
+                <br />
+                특히 잘 맞아요
+              </h2>
+              <p className="text-[14px] leading-7 text-white/78 mb-5">{baseProduct.recommendReason}</p>
+              <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
+                <div className="text-[11px] font-bold text-white/65 mb-2">한 줄 주의 포인트</div>
+                <p className="text-[13px] leading-6 text-white">{baseProduct.caution}</p>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <a
+                href={baseProduct.purchaseLink}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full px-5 py-4 bg-white text-[#004D40] rounded-2xl text-[14px] font-bold"
+              >
+                외부몰 이동
+                <ArrowUpRight size={16} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        <div className="lg:col-span-7 bg-white border border-gray-200 rounded-[28px] lg:rounded-[32px] p-6 lg:p-8">
+          <div className="text-[12px] font-bold text-[#8E8E93] mb-3">WHY THIS FITS</div>
+          <h2 className="text-[22px] lg:text-[26px] font-bold text-[#1C1C1E] mb-5">
+            왜 이 제품이 추천되나요?
+          </h2>
+          <div className="space-y-3">
+            {detailProduct.recommendationPoints.map((point) => (
+              <div
+                key={point}
+                className="bg-[#F8F8FA] border border-gray-100 rounded-2xl px-5 py-4 text-[14px] leading-6 text-[#1C1C1E]"
+              >
+                {point}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="lg:col-span-5 bg-white border border-gray-200 rounded-[28px] lg:rounded-[32px] p-6 lg:p-8">
+          <div className="text-[12px] font-bold text-[#8E8E93] mb-3">WATCH OUT</div>
+          <h2 className="text-[22px] lg:text-[26px] font-bold text-[#1C1C1E] mb-5">
+            사용 전 주의할 점
+          </h2>
+          {hasStrongCaution ? (
+            <div className="space-y-3">
+              {detailProduct.cautionPoints.map((point) => (
+                <div
+                  key={point}
+                  className="bg-[#FFF8F2] border border-[#F3E1CC] rounded-2xl px-5 py-4 text-[14px] leading-6 text-[#5C4631]"
+                >
+                  {point}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-[#F4FBF7] border border-[#D8EEDD] rounded-2xl px-5 py-4">
+              <p className="text-[14px] leading-6 text-[#1C1C1E]">
+                강한 주의 포인트는 적은 편이에요. 다만 {detailProduct.cautionPoints[0]}
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="bg-white border border-gray-200 rounded-[28px] lg:rounded-[32px] p-6 lg:p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+          <div className="lg:col-span-4">
+            <div className="text-[12px] font-bold text-[#8E8E93] mb-3">KEY INGREDIENTS</div>
+            <h2 className="text-[22px] lg:text-[26px] font-bold text-[#1C1C1E] mb-3">
+              핵심 성분은 이렇게 읽으면 돼요
+            </h2>
+            <p className="text-[14px] leading-7 text-[#6B6B6B]">
+              성분명을 그대로 나열하는 대신, 이 제품이 어떤 방향으로 작동하는지 판단할 수
+              있게 풀어 썼어요.
+            </p>
+          </div>
+
+          <div className="lg:col-span-8 space-y-3">
+            {detailProduct.ingredients.map((ingredient) => (
+              <div
+                key={ingredient.name}
+                className="bg-[#F8F8FA] border border-gray-100 rounded-2xl p-5 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3"
+              >
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                        ingredient.grade === "green"
+                          ? "bg-[#EAF8EF] text-[#2E8B57]"
+                          : ingredient.grade === "yellow"
+                            ? "bg-[#FFF4E5] text-[#B56B00]"
+                            : "bg-[#FCECEC] text-[#C0392B]"
+                      }`}
+                    >
+                      {ingredient.grade === "green"
+                        ? "안정적"
+                        : ingredient.grade === "yellow"
+                          ? "주의 필요"
+                          : "민감 피부 주의"}
+                    </span>
+                    <div className="text-[16px] font-bold text-[#1C1C1E]">{ingredient.name}</div>
+                  </div>
+                  <p className="text-[14px] leading-6 text-[#6B6B6B]">{ingredient.effect}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        <div className="lg:col-span-7 bg-[#F8F8FA] border border-gray-100 rounded-[28px] lg:rounded-[32px] p-6 lg:p-8">
+          <div className="text-[12px] font-bold text-[#8E8E93] mb-3">ALTERNATIVE</div>
+          <h2 className="text-[22px] lg:text-[26px] font-bold text-[#1C1C1E] mb-3">
+            비슷한 방향의 대체 제품
+          </h2>
+          <p className="text-[14px] leading-7 text-[#6B6B6B] mb-5">
+            지금 제품이 조금 무겁거나 자극적으로 느껴질까 걱정된다면 이런 선택지도 같이 볼 수 있어요.
+          </p>
+
+          <div className="bg-white border border-gray-200 rounded-[24px] p-5 lg:p-6">
+            <div className="flex items-center justify-between gap-4 mb-3">
+              <div>
+                <div className="text-[11px] font-bold text-[#8E8E93] mb-1">
+                  유사도 {detailProduct.alternative.similarity}%
+                </div>
+                <div className="text-[20px] font-bold text-[#1C1C1E]">
+                  {detailProduct.alternative.name}
+                </div>
+              </div>
+              {alternativeProduct && (
+                <Link
+                  href={`/market/${alternativeProduct.id}`}
+                  className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-[#004D40] text-white text-[13px] font-bold"
+                >
+                  비교해보기
+                </Link>
+              )}
+            </div>
+            <p className="text-[14px] leading-6 text-[#6B6B6B]">{detailProduct.alternative.reason}</p>
+          </div>
+        </div>
+
+        <div className="lg:col-span-5 bg-[#004D40] rounded-[28px] lg:rounded-[32px] p-6 lg:p-8 text-white">
+          <div className="text-[12px] font-bold text-white/65 mb-3">FINAL CHECK</div>
+          <h2 className="text-[24px] lg:text-[28px] font-bold leading-tight mb-3">
+            추천 이유와 주의 포인트가
+            <br />
+            모두 괜찮다면
+            <br />
+            이제 구매로 이어가세요
+          </h2>
+          <p className="text-[14px] leading-7 text-white/78">
+            ING는 제품이 맞는지 판단하는 단계까지 돕고, 최종 구매는 외부 몰에서 이어갈 수 있게 연결합니다.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
 }
