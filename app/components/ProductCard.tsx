@@ -97,16 +97,6 @@ export function ProductCard({
                   주의 포인트: {product.caution}
                 </p>
               )}
-              {isCompact && (
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[11px] font-semibold text-[#1C1C1E]">
-                    {product.price.toLocaleString()}원
-                  </span>
-                  {discount > 0 && (
-                    <span className="text-[11px] font-semibold text-[#E74C3C]">{discount}%</span>
-                  )}
-                </div>
-              )}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1">
                   <span className="text-[#FFB800]">★</span>

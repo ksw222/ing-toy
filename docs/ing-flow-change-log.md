@@ -54,3 +54,9 @@
 - Home and market pages received visual polish to align with the desired clean, modern brand tone.
 - Adjusted chip/button weights, shadows, and backgrounds for a more consistent premium feel.
 - Market grid now shows smaller cards to surface more products per view while keeping readability.
+
+## Market Light Refactor (2026-03-25)
+- Removed heavy top-area blocks to expose products within the first scroll.
+- Reduced filter dominance: skin focus stays primary, category is secondary, brand/sorting removed from main UI.
+- Added a clear top recommendation set (2-3 cards) followed by the rest of the comparison grid.
+- Kept recommendation-first card scanning by de-emphasizing commerce cues in recommendation cards.
