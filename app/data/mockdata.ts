@@ -24,6 +24,7 @@ export type ProductSummary = {
   match: number;
   mainIngredients: string[];
   category: ProductCategory;
+  image: string;
   isBestSeller: boolean;
   recommendedFor: string[];
   recommendReason: string;
@@ -41,6 +42,7 @@ export type ProductDetail = {
   brand: string;
   category: ProductCategory;
   price: number;
+  image: string;
   matchScore: number;
   skinScores: {
     dry: number;
@@ -88,6 +90,7 @@ export const sampleProducts: ProductSummary[] = [
     match: 98,
     mainIngredients: ["스네일 뮤신 96%", "판테놀"],
     category: "세럼",
+    image: "/products/cosrx-snail-essence.png",
     isBestSeller: true,
     recommendedFor: ["민감성", "진정", "보습"],
     recommendReason: "자극으로 지친 피부 장벽을 달래면서 수분감을 채우는 데 강점이 있어요.",
@@ -116,6 +119,7 @@ export const sampleProducts: ProductSummary[] = [
     match: 95,
     mainIngredients: ["저분자 히알루론산", "디판테놀"],
     category: "세럼",
+    image: "/products/torriden-divein-serum.png",
     isBestSeller: false,
     recommendedFor: ["수부지", "보습", "민감성"],
     recommendReason: "가볍게 스며들면서도 속당김을 채워 수분 부족형 피부에 잘 맞아요.",
@@ -143,6 +147,7 @@ export const sampleProducts: ProductSummary[] = [
     match: 92,
     mainIngredients: ["비타민 C 23%", "토코페롤"],
     category: "세럼",
+    image: "/products/numbuzin-vitamin-c-serum.png",
     isBestSeller: true,
     recommendedFor: ["트러블", "칙칙함", "탄력"],
     recommendReason: "색소 고민과 피부 톤 정리를 동시에 보고 싶은 사용자에게 방향성이 분명해요.",
@@ -171,6 +176,7 @@ export const sampleProducts: ProductSummary[] = [
     match: 89,
     mainIngredients: ["레티놀 0.1%", "바쿠치올"],
     category: "세럼",
+    image: "/products/somebymi-retinol-serum.png",
     isBestSeller: false,
     recommendedFor: ["트러블", "탄력", "수부지"],
     recommendReason: "피부결과 트러블 흔적, 초기 탄력 고민을 함께 잡고 싶을 때 적합해요.",
@@ -199,6 +205,7 @@ export const sampleProducts: ProductSummary[] = [
     match: 96,
     mainIngredients: ["어성초 77%", "병풀추출물"],
     category: "토너",
+    image: "/products/anua-heartleaf-toner.png",
     isBestSeller: true,
     recommendedFor: ["민감성", "진정", "트러블"],
     recommendReason: "열감과 붉은기, 예민함이 반복되는 피부를 진정시키는 데 안정적이에요.",
@@ -226,6 +233,7 @@ export const sampleProducts: ProductSummary[] = [
     match: 93,
     mainIngredients: ["세라마이드", "히알루론산"],
     category: "크림",
+    image: "/products/roundlab-ceramide-cream.png",
     isBestSeller: false,
     recommendedFor: ["건성", "보습", "민감성"],
     recommendReason: "속건조와 장벽 약화가 함께 오는 피부를 안정적으로 잡아주기 좋아요.",
@@ -252,6 +260,7 @@ export const detailedProducts: ProductDetail[] = [
     brand: "COSRX",
     category: "세럼",
     price: 21800,
+    image: "/products/cosrx-snail-essence.png",
     matchScore: 98,
     skinScores: { dry: 92, oily: 78, sensitive: 95 },
     ingredients: [
@@ -285,6 +294,7 @@ export const detailedProducts: ProductDetail[] = [
     brand: "토리든",
     category: "세럼",
     price: 16200,
+    image: "/products/torriden-divein-serum.png",
     matchScore: 95,
     skinScores: { dry: 88, oily: 90, sensitive: 84 },
     ingredients: [
@@ -318,6 +328,7 @@ export const detailedProducts: ProductDetail[] = [
     brand: "Numbuzin",
     category: "세럼",
     price: 18900,
+    image: "/products/numbuzin-vitamin-c-serum.png",
     matchScore: 92,
     skinScores: { dry: 72, oily: 82, sensitive: 55 },
     ingredients: [
@@ -351,6 +362,7 @@ export const detailedProducts: ProductDetail[] = [
     brand: "SOME BY MI",
     category: "세럼",
     price: 23400,
+    image: "/products/somebymi-retinol-serum.png",
     matchScore: 89,
     skinScores: { dry: 70, oily: 84, sensitive: 48 },
     ingredients: [
@@ -384,6 +396,7 @@ export const detailedProducts: ProductDetail[] = [
     brand: "아누아",
     category: "토너",
     price: 15300,
+    image: "/products/anua-heartleaf-toner.png",
     matchScore: 96,
     skinScores: { dry: 78, oily: 88, sensitive: 97 },
     ingredients: [
@@ -416,6 +429,7 @@ export const detailedProducts: ProductDetail[] = [
     brand: "라운드랩",
     category: "크림",
     price: 19800,
+    image: "/products/roundlab-ceramide-cream.png",
     matchScore: 93,
     skinScores: { dry: 95, oily: 66, sensitive: 88 },
     ingredients: [
@@ -500,7 +514,7 @@ export const mockUser: {
   mbti: string;
   ownedProducts: OwnedProductLog[];
 } = {
-  name: "김기성",
+  name: "김잉그",
   age: 24,
   major: "통계학과",
   skinType: "지복합성",

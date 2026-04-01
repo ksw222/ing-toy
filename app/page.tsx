@@ -1,402 +1,200 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowRight, Search } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Search, SlidersHorizontal, ArrowRight } from "lucide-react";
 
 import { ProductCard } from "./components/ProductCard";
 import { sampleProducts } from "./data/mockdata";
 
+// --- Types & Data ---
 type BaseProduct = (typeof sampleProducts)[number];
-
-type SkinFilter = "all" | "민감성" | "수부지" | "건성" | "트러블" | "진정" | "보습";
-
-type BrandShortcut = "닥터지" | "라로슈포제" | "COSRX" | "토리든";
+type SkinFilter = "전체" | "민감성" | "수부지" | "건성" | "트러블";
+type ConditionFilter = "전체" | "보습 위주" | "가벼운 사용감" | "무향료" | "무알콜";
 
 type HomeProduct = BaseProduct & {
-  recommendedFor: string[];
-  recommendReason: string;
-  caution: string;
-  brandAlias?: BrandShortcut;
+  tags: string[];
+  texture: "light" | "rich";
+  noFragrance?: boolean;
+  noAlcohol?: boolean;
 };
 
-const skinFilters: SkinFilter[] = ["all", "민감성", "수부지", "건성", "트러블", "진정", "보습"];
-
-const brandShortcuts: BrandShortcut[] = ["닥터지", "라로슈포제", "COSRX", "토리든"];
-
 const homeProducts: HomeProduct[] = [
-  {
-    ...sampleProducts[0],
-    recommendedFor: ["민감성", "진정", "보습"],
-    recommendReason: "자극 받은 피부를 빠르게 진정시키고 수분감을 채우기 좋아요.",
-    caution: "점도가 있어 레이어링이 많으면 무겁게 느껴질 수 있어요.",
-    brandAlias: "COSRX",
-  },
-  {
-    ...sampleProducts[1],
-    recommendedFor: ["수부지", "보습"],
-    recommendReason: "유수분 밸런스를 무너뜨리지 않으면서 매끈한 결 정리에 잘 맞아요.",
-    caution: "향이나 사용감에 예민하다면 먼저 소량 테스트가 좋아요.",
-    brandAlias: "토리든",
-  },
-  {
-    ...sampleProducts[2],
-    recommendedFor: ["트러블", "진정"],
-    recommendReason: "칙칙함과 자국 고민이 있을 때 집중 관리용으로 보기 좋아요.",
-    caution: "고함량 비타민 성분은 민감한 날엔 자극이 있을 수 있어요.",
-    brandAlias: "닥터지",
-  },
-  {
-    ...sampleProducts[3],
-    recommendedFor: ["트러블", "수부지"],
-    recommendReason: "번들거림이 올라오면서 트러블이 반복되는 피부에 방향성이 분명해요.",
-    caution: "레티놀류 사용이 낯설다면 격일 사용으로 시작하는 편이 안전해요.",
-    brandAlias: "라로슈포제",
-  },
-  {
-    ...sampleProducts[4],
-    recommendedFor: ["민감성", "진정"],
-    recommendReason: "열감이 오르거나 붉음이 도는 피부를 차분하게 진정시키기 좋아요.",
-    caution: "수분 위주 토너라 건조한 피부는 크림과 함께 쓰는 편이 좋아요.",
-    brandAlias: "닥터지",
-  },
-  {
-    ...sampleProducts[5],
-    recommendedFor: ["건성", "보습"],
-    recommendReason: "당김이 심한 피부에 수분막을 만들어주는 보습 집중형 제품이에요.",
-    caution: "지성 피부는 계절이나 루틴에 따라 무겁게 느껴질 수 있어요.",
-    brandAlias: "토리든",
-  },
+  { ...sampleProducts[0], tags: ["민감성 OK", "진정", "장벽"], texture: "rich", noFragrance: true, noAlcohol: true },
+  { ...sampleProducts[1], tags: ["가벼움", "수분", "데일리"], texture: "light", noFragrance: true, noAlcohol: true },
+  { ...sampleProducts[2], tags: ["트러블", "톤 정리", "집중 케어"], texture: "light" },
+  { ...sampleProducts[3], tags: ["트러블", "결 개선", "야간"], texture: "light" },
+  { ...sampleProducts[4], tags: ["민감성 OK", "진정", "저자극"], texture: "light", noFragrance: true, noAlcohol: true },
+  { ...sampleProducts[5], tags: ["보습", "장벽", "건성"], texture: "rich", noFragrance: true },
 ];
 
-const quickInputSuggestions = ["토리든", "라로슈포제", "닥터지 레드 블레미쉬", "COSRX"];
-
-const helperSteps = [
-  "피부타입과 고민을 기준으로 제품을 먼저 좁히고",
-  "성분 특성과 주의 포인트를 함께 보여주고",
-  "분석 결과를 바탕으로 구매 판단까지 도와줍니다",
-];
-
-const secondaryFeatures = [
-  {
-    href: "/lab/combo",
-    eyebrow: "성분 분석",
-    title: "성분 궁합 바로 확인",
-    description: "함께 써도 되는지 빠르게 체크해보세요.",
-  },
-  {
-    href: "/lab",
-    eyebrow: "루틴 점검",
-    title: "내 루틴 충돌 체크",
-    description: "지금 쓰는 조합에서 주의 포인트를 찾아드려요.",
-  },
-  {
-    href: "/market",
-    eyebrow: "성분 사전",
-    title: "제품 전체 더 둘러보기",
-    description: "추천 흐름을 본 뒤 전체 상품도 이어서 탐색할 수 있어요.",
-  },
-];
+const SKIN_TYPES: SkinFilter[] = ["전체", "민감성", "수부지", "건성", "트러블"];
+const CONDITIONS: ConditionFilter[] = ["전체", "보습 위주", "가벼운 사용감", "무향료", "무알콜"];
 
 export default function Home() {
-  const router = useRouter();
   const [query, setQuery] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState<SkinFilter>("all");
-  const [selectedBrand, setSelectedBrand] = useState<BrandShortcut | null>(null);
+  const [activeSkin, setActiveSkin] = useState<SkinFilter>("전체");
+  const [activeCondition, setActiveCondition] = useState<ConditionFilter>("전체");
 
-  const visibleProducts = homeProducts.filter((product) => {
-    const matchesFilter =
-      selectedFilter === "all" || product.recommendedFor.includes(selectedFilter);
-    const matchesBrand = !selectedBrand || product.brandAlias === selectedBrand;
+  // 즉각적인 필터링 로직 (ChatGPT/토스 스타일의 빠른 반응성)
+  const filteredProducts = useMemo(() => {
+    return homeProducts.filter((product) => {
+      // 1. 검색어 필터
+      const searchMatch =
+        query === "" ||
+        `${product.brand} ${product.name} ${product.mainIngredients.join(" ")}`
+          .toLowerCase()
+          .includes(query.toLowerCase());
 
-    return matchesFilter && matchesBrand;
-  });
+      // 2. 피부타입 필터
+      const skinMatch = activeSkin === "전체" || product.recommendedFor.includes(activeSkin);
 
-  const productsToRender = visibleProducts.length > 0 ? visibleProducts : homeProducts;
+      // 3. 조건 필터
+      const conditionMatch = (() => {
+        if (activeCondition === "전체") return true;
+        if (activeCondition === "보습 위주") return product.recommendedFor.includes("보습") || product.texture === "rich";
+        if (activeCondition === "가벼운 사용감") return product.texture === "light";
+        if (activeCondition === "무향료") return !!product.noFragrance;
+        if (activeCondition === "무알콜") return !!product.noAlcohol;
+        return true;
+      })();
 
-  const handleAnalyze = () => {
-    const normalizedQuery = query.trim().toLowerCase();
-
-    if (!normalizedQuery) {
-      router.push("/market");
-      return;
-    }
-
-    const matchedProduct = homeProducts.find((product) => {
-      const target = `${product.brand} ${product.name}`.toLowerCase();
-      return target.includes(normalizedQuery);
+      return searchMatch && skinMatch && conditionMatch;
     });
-
-    if (matchedProduct) {
-      router.push(`/market/${matchedProduct.id}`);
-      return;
-    }
-
-    router.push("/market");
-  };
-
-  const handleSuggestionClick = (value: string) => {
-    setQuery(value);
-  };
+  }, [query, activeSkin, activeCondition]);
 
   return (
-    <div className="max-w-7xl mx-auto px-5 lg:px-6 pt-8 lg:pt-12 pb-24 space-y-10 lg:space-y-14 text-[#1C1C1E]">
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-        <div className="lg:col-span-7">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#F6F7F8] border border-gray-100 rounded-full mb-5">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#2ECC71]" />
-            <span className="text-[12px] font-semibold text-[#6B6B6B]">
-              Ingredient-first skincare exploration
-            </span>
-          </div>
-
-          <h1 className="text-[30px] lg:text-[46px] font-bold leading-[1.14] tracking-[-0.03em] text-[#111111] mb-4">
-            내 피부에 맞는 화장품을
-            <br />
-            성분 기준으로 찾으세요
+    <div className="min-h-screen bg-[#FFFFFF] text-[#1C1C1E] selection:bg-[#004D40] selection:text-white pb-24">
+      <div className="max-w-5xl mx-auto px-6 pt-12 md:pt-16">
+        
+        {/* Header: 세련되고 절제된 타이포그래피 */}
+        <header className="mb-8">
+          <h1 className="text-[22px] md:text-[26px] font-bold text-[#111111] tracking-tight leading-snug">
+            내 피부에 필요한 성분만 <br className="md:hidden" />
+            <span className="text-[#004D40]">정확하게 필터링하세요.</span>
           </h1>
-
-          <p className="max-w-2xl text-[15px] lg:text-[17px] leading-7 text-[#5B5B60]">
-            피부타입과 고민에 맞는 제품을 바로 탐색하고, 지금 쓰는 제품도 간단하게
-            분석해보세요. ING는 추천 이유까지 함께 보여주는 성분 중심 탐색
-            서비스입니다.
+          <p className="mt-2 text-[14px] text-[#8E8E93] font-medium tracking-tight">
+            브랜드가 아닌 전성분 데이터를 기준으로 분석합니다.
           </p>
-        </div>
+        </header>
 
-        <div className="lg:col-span-5">
-          <div className="bg-[#004D40] rounded-[28px] lg:rounded-[32px] p-6 lg:p-7 text-white h-full flex flex-col justify-between shadow-[0_16px_40px_rgba(0,77,64,0.18)]">
-            <div>
-              <div className="text-[12px] font-semibold text-white/70 mb-3">빠른 시작</div>
-              <h2 className="text-[22px] lg:text-[26px] font-bold leading-tight mb-3">
-                지금 쓰는 제품이
-                <br />
-                괜찮은지 확인해보세요
-              </h2>
-              <p className="text-[14px] leading-6 text-white/78">
-                제품명이나 브랜드를 입력하면 바로 탐색을 시작할 수 있어요.
-              </p>
+        {/* Control Panel: 검색 및 필터 인터페이스 (SaaS 느낌의 밀도 높은 디자인) */}
+        <section className="bg-[#F7F8F9] border border-gray-100/80 rounded-2xl p-4 md:p-5 mb-10 transition-all">
+          <div className="flex flex-col gap-5">
+            
+            {/* Search Input */}
+            <div className="relative flex items-center w-full bg-white rounded-xl border border-gray-200 overflow-hidden focus-within:border-[#004D40] focus-within:ring-1 focus-within:ring-[#004D40] transition-all">
+              <Search size={18} className="text-[#8E8E93] ml-4" />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="제품명, 피하고 싶은 성분(예: 향료), 고민 검색"
+                className="w-full py-3.5 px-3 text-[14px] md:text-[15px] bg-transparent outline-none placeholder:text-[#9A9AA0]"
+              />
             </div>
 
-            <div className="mt-6 space-y-3">
-              <div className="bg-white/10 rounded-2xl p-4 border border-white/10">
-                <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-[0_6px_20px_rgba(0,77,64,0.12)]">
-                  <Search size={18} strokeWidth={2.5} color="#004D40" />
-                  <input
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter") {
-                        handleAnalyze();
-                      }
-                    }}
-                    type="text"
-                    placeholder="제품명 또는 브랜드명을 입력하세요"
-                    className="flex-1 bg-transparent outline-none text-[14px] text-[#1C1C1E] placeholder:text-[#9A9AA0]"
-                  />
-                  <button
-                    onClick={handleAnalyze}
-                    className="px-4 py-2 bg-[#004D40] hover:bg-[#003D33] text-white rounded-lg text-[13px] font-semibold transition-colors"
-                  >
-                    분석해보기
-                  </button>
+            {/* Filters (칩 형태, 작은 폰트) */}
+            <div className="flex flex-col md:flex-row gap-4 md:gap-8">
+              <div className="flex flex-col gap-2">
+                <span className="text-[12px] font-bold text-[#8E8E93] flex items-center gap-1.5 uppercase tracking-wider">
+                  <SlidersHorizontal size={12} /> Skin Type
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {SKIN_TYPES.map((skin) => (
+                    <button
+                      key={skin}
+                      onClick={() => setActiveSkin(skin)}
+                      className={`px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors ${
+                        activeSkin === skin
+                          ? "bg-[#1C1C1E] text-white"
+                          : "bg-white text-[#6B6B6B] border border-gray-200 hover:bg-gray-50"
+                      }`}
+                    >
+                      {skin}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2">
-                {quickInputSuggestions.map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => handleSuggestionClick(item)}
-                    className="px-3 py-2 rounded-full bg-white/10 hover:bg-white/20 text-[12px] font-semibold text-white transition-colors"
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-[#F7F8F9] border border-gray-100 rounded-[28px] lg:rounded-[32px] p-5 lg:p-7">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-          <div className="lg:col-span-7 space-y-5">
-            <div>
-              <div className="text-[13px] font-bold text-[#1C1C1E] mb-3">
-                내 피부 고민으로 먼저 골라보세요
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {skinFilters.map((filter) => {
-                  const isActive = selectedFilter === filter;
-
-                  return (
+              <div className="flex flex-col gap-2">
+                <span className="text-[12px] font-bold text-[#8E8E93] flex items-center gap-1.5 uppercase tracking-wider">
+                  <SlidersHorizontal size={12} /> Condition
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {CONDITIONS.map((condition) => (
                     <button
-                      key={filter}
-                      onClick={() => setSelectedFilter(filter)}
-                      className={`px-4 py-2 rounded-full text-[13px] font-medium transition-colors ${
-                        isActive
-                          ? "bg-[#004D40] text-white shadow-[0_6px_18px_rgba(0,77,64,0.18)]"
-                          : "bg-white text-[#1C1C1E] border border-gray-200 hover:border-[#004D40]/30"
+                      key={condition}
+                      onClick={() => setActiveCondition(condition)}
+                      className={`px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors ${
+                        activeCondition === condition
+                          ? "bg-[#004D40] text-white"
+                          : "bg-white text-[#6B6B6B] border border-gray-200 hover:bg-gray-50"
                       }`}
                     >
-                      {filter === "all" ? "전체" : filter}
+                      {condition}
                     </button>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div>
-              <div className="text-[13px] font-bold text-[#1C1C1E] mb-3">
-                많이 찾는 브랜드로 바로 시작할 수 있어요
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {brandShortcuts.map((brand) => {
-                  const isActive = selectedBrand === brand;
-
-                  return (
-                    <button
-                      key={brand}
-                      onClick={() => setSelectedBrand(isActive ? null : brand)}
-                      className={`px-4 py-2 rounded-full text-[13px] font-medium transition-colors ${
-                        isActive
-                          ? "bg-[#1C1C1E] text-white"
-                          : "bg-white text-[#6B6B6B] border border-gray-200 hover:text-[#1C1C1E]"
-                      }`}
-                    >
-                      {brand}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
           </div>
+        </section>
 
-          <div className="lg:col-span-5 bg-white rounded-[24px] border border-gray-100 p-5 lg:p-6 shadow-[0_10px_30px_rgba(15,61,53,0.08)]">
-            <div className="text-[12px] font-semibold text-[#8E8E93] mb-3">지금 보고 있는 탐색 조건</div>
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-3 py-1.5 rounded-full bg-[#F3F4F6] text-[12px] font-semibold text-[#1C1C1E]">
-                피부: {selectedFilter === "all" ? "전체" : selectedFilter}
-              </span>
-              <span className="px-3 py-1.5 rounded-full bg-[#F3F4F6] text-[12px] font-semibold text-[#1C1C1E]">
-                브랜드: {selectedBrand ?? "전체"}
-              </span>
-            </div>
-            <p className="text-[14px] leading-6 text-[#5B5B60]">
-              빠르게 조건을 바꾸며 둘러보고, 마음에 드는 제품은 상세 분석으로
-              이어서 확인해보세요.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div className="flex items-end justify-between gap-4 mb-5">
-          <div>
-            <h2 className="text-[22px] lg:text-[28px] font-bold text-[#1C1C1E] mb-2">
-              내 피부 고민으로 먼저 둘러보세요
+        {/* Results Area: 필터가 걸린 상품이 즉시 노출되는 영역 */}
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-[14px] font-bold text-[#111111]">
+              분석 결과 <span className="text-[#004D40] ml-1">{filteredProducts.length}</span>
             </h2>
-            <p className="text-[14px] lg:text-[15px] text-[#5B5B60]">
-              추천 이유가 보이는 카드로 빠르게 비교할 수 있어요.
-            </p>
+            {filteredProducts.length > 0 && (
+              <Link href="/market" className="text-[13px] font-medium text-[#8E8E93] hover:text-[#1C1C1E] flex items-center gap-1 transition-colors">
+                전체보기 <ArrowRight size={14} />
+              </Link>
+            )}
           </div>
-          <Link
-            href="/market"
-            className="hidden lg:inline-flex items-center gap-2 text-[14px] font-semibold text-[#004D40]"
-          >
-            전체 제품 보기
-            <ArrowRight size={16} />
-          </Link>
-        </div>
 
-        <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory">
-          {productsToRender.map((product) => (
-            <div key={product.id} className="min-w-[280px] max-w-[280px] snap-start">
-              <ProductCard product={product} variant="recommendation" />
+          {filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+              {filteredProducts.map((product) => (
+                <div key={product.id} className="group flex flex-col h-full bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-[#004D40]/30 transition-colors shadow-sm hover:shadow-md">
+                  {/* 기존 ProductCard를 래핑하여 디자인 톤을 맞춤 */}
+                  <div className="p-4 flex-grow">
+                    <ProductCard product={product} variant="recommendation" />
+                  </div>
+                  
+                  {/* 데이터 분석가/성분 중심 플랫폼의 느낌을 살린 하단 태그 영역 */}
+                  <div className="px-4 py-3 bg-[#F7F8F9] border-t border-gray-100 flex flex-wrap gap-1.5 mt-auto">
+                    {product.tags.map((tag) => (
+                      <span key={tag} className="px-2 py-1 bg-white border border-gray-200 rounded-md text-[11px] font-bold text-[#48484A]">
+                        {tag}
+                      </span>
+                    ))}
+                    {product.noFragrance && (
+                      <span className="px-2 py-1 bg-[#004D40]/5 border border-[#004D40]/10 rounded-md text-[11px] font-bold text-[#004D40]">
+                        무향료
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-white border border-gray-200 rounded-[28px] lg:rounded-[32px] p-6 lg:p-8 shadow-[0_14px_30px_rgba(15,61,53,0.08)]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
-          <div className="lg:col-span-8">
-            <div className="text-[12px] font-semibold text-[#8E8E93] mb-3">더 정확한 추천</div>
-            <h2 className="text-[22px] lg:text-[28px] font-bold text-[#1C1C1E] mb-3">
-              더 정확한 추천이 필요하신가요?
-            </h2>
-            <p className="text-[14px] lg:text-[15px] leading-7 text-[#5B5B60]">
-              피부타입과 고민을 바탕으로 더 정밀한 추천과 분석을 받아보세요.
-            </p>
-          </div>
-          <div className="lg:col-span-4">
-            <Link
-              href="/market"
-              className="inline-flex items-center justify-center w-full px-5 py-4 bg-[#004D40] hover:bg-[#003D33] text-white rounded-2xl text-[14px] font-semibold transition-colors shadow-[0_14px_28px_rgba(0,77,64,0.2)]"
-            >
-              내 피부에 맞는 제품 더 찾기
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-        <div className="lg:col-span-5 bg-[#004D40] rounded-[28px] lg:rounded-[32px] p-6 lg:p-8 text-white shadow-[0_16px_40px_rgba(0,77,64,0.2)]">
-          <div className="text-[12px] font-bold text-white/65 mb-3">WHY ING</div>
-          <h2 className="text-[22px] lg:text-[28px] font-bold leading-tight mb-3">
-            ING는 이렇게 추천해요
-          </h2>
-          <p className="text-[14px] leading-7 text-white/78">
-            단순히 제품을 나열하지 않고, 피부 조건과 성분 해석을 함께 보여주는
-            흐름을 만드는 데 집중합니다.
-          </p>
-        </div>
-
-        <div className="lg:col-span-7 bg-[#F7F8F9] border border-gray-100 rounded-[28px] lg:rounded-[32px] p-6 lg:p-8 shadow-[0_10px_24px_rgba(17,17,17,0.06)]">
-          <div className="space-y-4">
-            {helperSteps.map((step) => (
-              <div
-                key={step}
-                className="bg-white rounded-2xl border border-gray-100 px-5 py-4 text-[14px] lg:text-[15px] text-[#1C1C1E] shadow-[0_8px_20px_rgba(17,17,17,0.06)]"
+          ) : (
+            <div className="w-full py-20 flex flex-col items-center justify-center bg-[#F7F8F9] rounded-2xl border border-gray-100 border-dashed mt-4">
+              <Search size={32} className="text-[#D1D1D6] mb-3" />
+              <p className="text-[14px] text-[#5B5B60] font-medium">조건에 맞는 성분 데이터가 없습니다.</p>
+              <button 
+                onClick={() => { setQuery(""); setActiveSkin("전체"); setActiveCondition("전체"); }}
+                className="mt-3 text-[13px] font-bold text-[#004D40] hover:underline"
               >
-                {step}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+                필터 초기화
+              </button>
+            </div>
+          )}
+        </section>
 
-      <section>
-        <div className="mb-5">
-          <h2 className="text-[20px] lg:text-[24px] font-bold text-[#1C1C1E] mb-2">
-            다른 기능도 함께 활용해보세요
-          </h2>
-          <p className="text-[14px] lg:text-[15px] text-[#5B5B60]">
-            핵심 탐색 흐름 아래에서 필요한 도구만 가볍게 이어갈 수 있도록 두었습니다.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {secondaryFeatures.map((feature) => (
-            <Link
-              key={feature.href}
-              href={feature.href}
-              className="bg-white border border-gray-200 rounded-[24px] p-5 lg:p-6 hover:shadow-[0_16px_30px_rgba(17,17,17,0.08)] transition-all"
-            >
-              <div className="text-[11px] font-semibold text-[#8E8E93] uppercase mb-3">
-                {feature.eyebrow}
-              </div>
-              <h3 className="text-[18px] font-bold text-[#1C1C1E] mb-2">{feature.title}</h3>
-              <p className="text-[13px] leading-6 text-[#5B5B60] mb-4">{feature.description}</p>
-              <div className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#004D40]">
-                바로 가기
-                <ArrowRight size={15} />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+      </div>
     </div>
   );
 }
