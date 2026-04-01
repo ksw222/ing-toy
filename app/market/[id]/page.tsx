@@ -1,5 +1,6 @@
-"use client";
+﻿"use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowUpRight, ChevronLeft } from "lucide-react";
@@ -26,21 +27,35 @@ export default function ProductDetailPage() {
         className="inline-flex items-center gap-1 text-[14px] text-[#8E8E93] hover:text-[#1C1C1E] transition-colors"
       >
         <ChevronLeft size={16} />
-        추천 제품 목록으로 돌아가기
+        돌아가기
       </Link>
 
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         <div className="lg:col-span-5">
           <div className="bg-white border border-gray-200 rounded-[28px] lg:rounded-[32px] p-5 lg:p-6 shadow-[0_12px_30px_rgba(17,17,17,0.08)]">
-            <div className="aspect-square bg-[#F7F8F9] rounded-2xl border border-gray-100 flex items-center justify-center mb-4">
-              <span className="text-5xl">🧴</span>
+            <div className="relative aspect-square bg-[#F7F8F9] rounded-2xl border border-gray-100 overflow-hidden mb-4">
+              <Image
+                src={baseProduct.image}
+                alt={baseProduct.name}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 40vw"
+              />
             </div>
             <div className="grid grid-cols-4 gap-3">
               {[1, 2, 3, 4].map((item) => (
                 <div
                   key={item}
-                  className="aspect-square bg-[#F7F8F9] rounded-xl border border-gray-100"
-                />
+                  className="relative aspect-square bg-[#F7F8F9] rounded-xl border border-gray-100 overflow-hidden"
+                >
+                  <Image
+                    src={baseProduct.image}
+                    alt={`${baseProduct.name} 썸네일 ${item}`}
+                    fill
+                    className="object-cover"
+                    sizes="120px"
+                  />
+                </div>
               ))}
             </div>
           </div>
@@ -100,15 +115,15 @@ export default function ProductDetailPage() {
             <div>
               <div className="text-[12px] font-bold text-white/65 mb-3">구매 전 빠른 판단</div>
               <h2 className="text-[24px] lg:text-[28px] font-bold leading-tight mb-3">
-                이 제품은
+                이 제품이
                 <br />
                 {baseProduct.recommendedFor.slice(0, 2).join(" · ")} 피부에
                 <br />
-                특히 잘 맞아요
+                잘 맞는 이유
               </h2>
               <p className="text-[14px] leading-7 text-white/78 mb-5">{baseProduct.recommendReason}</p>
               <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
-                <div className="text-[11px] font-bold text-white/65 mb-2">한 줄 주의 포인트</div>
+                <div className="text-[11px] font-bold text-white/65 mb-2">주의 포인트</div>
                 <p className="text-[13px] leading-6 text-white">{baseProduct.caution}</p>
               </div>
             </div>
@@ -120,7 +135,7 @@ export default function ProductDetailPage() {
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2 w-full px-5 py-4 bg-white text-[#004D40] rounded-2xl text-[14px] font-bold"
               >
-                외부몰 이동
+                구매 링크로 이동
                 <ArrowUpRight size={16} />
               </a>
             </div>
@@ -132,7 +147,7 @@ export default function ProductDetailPage() {
         <div className="lg:col-span-7 bg-white border border-gray-200 rounded-[28px] lg:rounded-[32px] p-6 lg:p-8">
           <div className="text-[12px] font-bold text-[#8E8E93] mb-3">WHY THIS FITS</div>
           <h2 className="text-[22px] lg:text-[26px] font-bold text-[#1C1C1E] mb-5">
-            왜 이 제품이 추천되나요?
+            왜 이 제품을 추천하나요?
           </h2>
           <div className="space-y-3">
             {detailProduct.recommendationPoints.map((point) => (
@@ -177,11 +192,10 @@ export default function ProductDetailPage() {
           <div className="lg:col-span-4">
             <div className="text-[12px] font-bold text-[#8E8E93] mb-3">KEY INGREDIENTS</div>
             <h2 className="text-[22px] lg:text-[26px] font-bold text-[#1C1C1E] mb-3">
-              핵심 성분은 이렇게 읽으면 돼요
+              핵심 성분을 이해하면 쉬워요
             </h2>
             <p className="text-[14px] leading-7 text-[#6B6B6B]">
-              성분명을 그대로 나열하는 대신, 이 제품이 어떤 방향으로 작동하는지 판단할 수
-              있게 풀어 썼어요.
+              성분명을 그대로 나열하는 대신, 이 제품이 어떤 방향으로 작동하는지 이해하기 쉽게 정리했어요.
             </p>
           </div>
 
@@ -203,7 +217,7 @@ export default function ProductDetailPage() {
                       }`}
                     >
                       {ingredient.grade === "green"
-                        ? "안정적"
+                        ? "안정"
                         : ingredient.grade === "yellow"
                           ? "주의 필요"
                           : "민감 피부 주의"}
@@ -261,10 +275,14 @@ export default function ProductDetailPage() {
             이제 구매로 이어가세요
           </h2>
           <p className="text-[14px] leading-7 text-white/78">
-            ING는 제품이 맞는지 판단하는 단계까지 돕고, 최종 구매는 외부 몰에서 이어갈 수 있게 연결합니다.
+            ING는 제품이 맞는지 판단하는 단계까지 돕고, 최종 구매는 사용자가 스스로 결정할 수 있게 연결합니다.
           </p>
         </div>
       </section>
     </div>
   );
 }
+
+
+
+

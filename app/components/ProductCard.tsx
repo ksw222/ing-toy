@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 
 type ProductCardProduct = {
@@ -12,6 +13,7 @@ type ProductCardProduct = {
   reviewCount: number;
   match: number;
   mainIngredients: string[];
+  image: string;
   isBestSeller?: boolean;
   recommendedFor?: string[];
   recommendReason?: string;
@@ -40,6 +42,13 @@ export function ProductCard({
     <Link href={`/market/${product.id}`} className="block h-full">
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer group h-full">
         <div className="relative aspect-square bg-[#F8F8F8] overflow-hidden">
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          />
           <div className="absolute top-2 left-2 px-2 py-1 bg-[#2ECC71] rounded-md z-10">
             <div className="text-white text-[10px] font-bold">매칭 {product.match}%</div>
           </div>
@@ -63,7 +72,7 @@ export function ProductCard({
             </div>
           )}
 
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/5 group-hover:scale-105 transition-transform duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/5" />
         </div>
 
         <div className={`${isCompact ? "p-3" : "p-4"} relative bg-white`}>
